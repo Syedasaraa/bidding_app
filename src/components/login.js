@@ -7,12 +7,15 @@ import {
   signInWithGoogle,
 } from "../firebase/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
+import { useLoginMutation } from "../redux/commonApiCall";
 
 const Login = () => {
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
   const router = useRouter();
   const [user, loading, error] = useAuthState(auth);
+
+  const [login, { isLoading, error: loginError }] = useLoginMutation();
 
   useEffect(() => {
     if (loading) {
@@ -60,12 +63,12 @@ const Login = () => {
         <div className="text-center hover:border-b ">
           <Link href="/reset">Forgot Password</Link>
         </div>
-        <div >
-          Don't Have an account? 
+        <div>
+          Don't Have an account?
           <Link href="/register" className="hover:border-b">
             Register
           </Link>
-           Now
+          Now
         </div>
       </form>
     </div>
