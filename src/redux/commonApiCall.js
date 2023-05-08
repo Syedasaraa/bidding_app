@@ -1,46 +1,57 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-const fakeApi = "http://localhost:3333/";
+const Api = "http://localhost:3333/";
 export const commonApiCall = createApi({
   reducerPath: "commonApiCall",
   tagTypes: ["commonApiCall"],
-  baseQuery: fetchBaseQuery({ baseUrl: fakeApi }),
-  endpoints: (builder) => ({
-    // getApiCall: builder.query({
-    //   query: (url) => url,
-    //   providesTags: ["commonApiCall"],
-    // }),
+  baseQuery: fetchBaseQuery({
+    baseUrl: Api,
+  }),
 
-    // createApiCall: builder.mutation({
-    //   query: (args) => {
-    //     const { createApiUrl, formData } = args;
+  endpoints: (builder) => ({
+    getUsersApi: builder.query({
+      query: (url) => ({
+        url,
+        method: "GET",
+        providesTags: ["commonApiCall"],
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      }),
+    }),
+
+    // createUserApi: builder.mutation({
+    //   query: (formData) => {
     //     return {
-    //       url: createApiUrl,
+    //       url: "auth/signin",
     //       method: "post",
     //       body: formData,
     //     };
     //   },
     // }),
 
-    // register: builder.mutation({
-    //   query: (credentials) => ({
-    //     url: "register",
-    //     method: "post",
-    //     body: credentials,
-    //   }),
-    // }),
+    register: builder.mutation({
+      query: (args) => {
+        const { url, formData } = args 
+        return { 
+          url,
+          method: 'POST', 
+          body : formData
+        }
+      }
+    }),
 
     login: builder.mutation({
-      query: (credentials) => ({
-        url: "/auth/signin",
-        method: "POST",
-        body: credentials,
-      }),
+      query: (args) => {
+        const { url, formData } = args 
+        return {
+          url,
+          method: 'post',
+          body: formData
+        }
+      }
     }),
   }),
 });
 
-export const {
-  useGetApiCallQuery,
-  useCreateApiCallMutation,
-  useLoginMutation,
-} = commonApiCall;
+export const { useLoginMutation, useRegisterMutation, useGetUsersApiQuery } =
+  commonApiCall;
