@@ -70,20 +70,19 @@ export default function SignInSide() {
       password: info.get("password"),
       rememberMeChecked 
       }; 
-      console.log(formData)
+      console.log(typeof rememberMeChecked)
     const url = "auth/signin";
     const { data } = await login({ url, formData });
-      
     if (data) {
         localStorage.setItem("token", data?.access_token);
         if (rememberMeChecked) {
-          localStorage.setItem("rememberMeToken", data.access_token);
+          localStorage.setItem("rememberMeToken", data?.rememberMeToken);
         }
         if (role === 'user') {
             router.push("/shops");
         }
         else {
-            router.push('/posts')
+           // router.push('admin/posts')
        }
     }
   };
@@ -100,11 +99,11 @@ export default function SignInSide() {
           sx={{
             backgroundImage:
               "url(https://images.unsplash.com/photo-1637903921530-f1135c99b8d5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80)",
-            // backgroundRepeat: "no-repeat",
-            // backgroundColor: (t) =>
-            //   t.palette.mode === "light"
-            //     ? t.palette.grey[50]
-            //     : t.palette.grey[900],
+            backgroundRepeat: "no-repeat",
+            backgroundColor: (t) =>
+              t.palette.mode === "light"
+                ? t.palette.grey[50]
+                : t.palette.grey[900],
             backgroundSize: "cover",
             backgroundPosition: "center",
           }}
