@@ -19,6 +19,16 @@ export const commonApiCall = createApi({
       }),
     }),
 
+    getUser: builder.query({
+      query: (url) => ({
+        url,
+        method: "GET",
+        providesTags: ["commonApiCall"],
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("rememberMeToken")}`,
+        },
+      }),
+    }),
     // createUserApi: builder.mutation({
     //   query: (formData) => {
     //     return {
@@ -31,27 +41,27 @@ export const commonApiCall = createApi({
 
     register: builder.mutation({
       query: (args) => {
-        const { url, formData } = args 
-        return { 
+        const { url, formData } = args;
+        return {
           url,
-          method: 'POST', 
-          body : formData
-        }
-      }
+          method: "POST",
+          body: formData,
+        };
+      },
     }),
 
     login: builder.mutation({
       query: (args) => {
-        const { url, formData } = args 
+        const { url, formData } = args;
         return {
           url,
-          method: 'post',
-          body: formData
-        }
-      }
+          method: "post",
+          body: formData,
+        };
+      },
     }),
   }),
 });
 
-export const { useLoginMutation, useRegisterMutation, useGetUsersApiQuery } =
+export const { useLoginMutation, useRegisterMutation, useGetUsersApiQuery ,useGetUserQuery} =
   commonApiCall;

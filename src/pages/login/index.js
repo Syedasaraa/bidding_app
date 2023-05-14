@@ -1,7 +1,7 @@
-import Login from "@/components/login";
+import SignInSide from "@/components/muiComponents/SignIn";
 
 const index = () => {
-  return <Login />;
+  return <SignInSide />;
 };
 
 export default index;
