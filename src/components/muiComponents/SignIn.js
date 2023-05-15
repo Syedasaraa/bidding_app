@@ -16,9 +16,9 @@ import { useLoginMutation } from "../../redux/commonApiCall";
 import { useRouter } from "next/router";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
-import FormHelperText from "@mui/material/FormHelperText";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
+import Alert from "@mui/material/Alert";
 
 const theme = createTheme({
   palette: {
@@ -56,34 +56,37 @@ function Copyright(props) {
 
 export default function SignInSide() {
   const router = useRouter();
-  const [login, { isLoading, error: loginError, isSuccess }] =
-        useLoginMutation();
-    
-    const [role, setRole] = React.useState("");
-    const [rememberMeChecked, setRememberMeChecked] = React.useState(false);
+  const [login, { isLoading, error, isSuccess , isError}] = useLoginMutation();
+
+  const [role, setRole] = React.useState("");
+  const [rememberMeChecked, setRememberMeChecked] = React.useState(false);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+
     const info = new FormData(event.currentTarget);
     let formData = {
       email: info.get("email"),
       password: info.get("password"),
-      rememberMeChecked 
-      }; 
-      console.log(typeof rememberMeChecked)
+      rememberMeChecked,
+      role,
+    };
+
     const url = "auth/signin";
     const { data } = await login({ url, formData });
-    if (data) {
+    if (isSuccess) {
+      
+      if (data) {
         localStorage.setItem("token", data?.access_token);
         if (rememberMeChecked) {
           localStorage.setItem("rememberMeToken", data?.rememberMeToken);
         }
-        if (role === 'user') {
-            router.push("/shops");
+        if (role === "user") {
+          router.push("/shops");
+        } else {
+          router.push("/admin");
         }
-        else {
-           // router.push('admin/posts')
-       }
+      }
     }
   };
 
@@ -124,6 +127,11 @@ export default function SignInSide() {
             <Typography component="h1" variant="h5" color="text.primary">
               Sign in
             </Typography>
+            {isError && (
+              <Alert sx={{ width: "80%" }} severity="error">
+                <strong> {error.data.message} </strong>
+              </Alert>
+            )}
             <Box
               component="form"
               noValidate
@@ -157,6 +165,7 @@ export default function SignInSide() {
                   id="demo-select-small"
                   value={role}
                   label="Role"
+                  name="role"
                   onChange={(e) => setRole(e.target.value)}
                 >
                   <MenuItem value="">
@@ -167,7 +176,13 @@ export default function SignInSide() {
                 </Select>
               </FormControl>
               <FormControlLabel
-                control={<Checkbox value={rememberMeChecked} color="primary" name="remember"/>}
+                control={
+                  <Checkbox
+                    value={rememberMeChecked}
+                    color="primary"
+                    name="remember"
+                  />
+                }
                 label="Remember me"
                 onChange={(e) => setRememberMeChecked(e.target.checked)}
               />
@@ -187,7 +202,7 @@ export default function SignInSide() {
                   </Link>
                 </Grid>
                 <Grid item>
-                  <Link href="#" variant="body2">
+                  <Link href="/register" variant="body2">
                     {"Don't have an account? Sign Up"}
                   </Link>
                 </Grid>

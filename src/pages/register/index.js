@@ -1,8 +1,8 @@
-import Register from "@/components/register"
+import SignUp from "@/components/muiComponents/SignUp"
 
 const index = () => {
   return (
-    <Register />
+    <SignUp/>
   )
 }
 
