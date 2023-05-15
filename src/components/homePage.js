@@ -1,4 +1,4 @@
-import React, { usestate } from "react";
+import React, { useEffect, usestate } from "react";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import { useState } from "react";
@@ -29,6 +29,14 @@ const Homepage = () => {
     },
   ];
   const [current, setCurrent] = useState(0);
+
+useEffect(() => {
+  const intervalId = setInterval(() => {
+    setCurrent((current) => (current + 1) % slides.length);
+  }, 3000);
+  return () => clearInterval(intervalId);
+}, []);
+  
   return (
     <div>
       <div className=" w-full m-auto relative group">
@@ -55,7 +63,7 @@ const Homepage = () => {
         </div>
         <div
           onClick={() => {
-            if (current === 6) {
+            if (current === slides.length-1) {
               setCurrent(0);
             } else {
               setCurrent((prev) => prev + 1);
